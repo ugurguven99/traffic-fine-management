@@ -1,0 +1,387 @@
+﻿
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - Trafik Ceza Yönetimi</title>
+
+    <link rel="stylesheet"
+          href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link rel="stylesheet"
+          href="~/css/site.css"
+          asp-append-version="true" />
+
+    <link rel="stylesheet"
+          href="~/Traffic.styles.css"
+          asp-append-version="true" />
+
+    <style>
+        :root {
+            --primary-dark: #14253e;
+            --primary-light: #1e3655;
+            --accent: #3b82f6;
+            --page-bg: #f4f7fb;
+        }
+
+        body {
+            background-color: var(--page-bg);
+            color: #243247;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Üst menü */
+        .app-navbar {
+            background: linear-gradient(
+                110deg,
+                var(--primary-dark),
+                var(--primary-light)
+            );
+
+            box-shadow: 0 3px 14px rgba(15, 23, 42, 0.13);
+            padding: 0.8rem 0;
+        }
+
+        .app-brand {
+            color: #fff !important;
+            font-weight: 700;
+            font-size: 1.15rem;
+            letter-spacing: 0.2px;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .brand-icon {
+            width: 34px;
+            height: 34px;
+            background: rgba(255, 255, 255, 0.13);
+            border-radius: 9px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 8px;
+        }
+
+        .app-navbar .nav-link {
+            color: rgba(255,255,255,0.82) !important;
+            border-radius: 7px;
+            padding: 0.55rem 0.8rem !important;
+            font-weight: 500;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .app-navbar .nav-link:hover,
+        .app-navbar .nav-link:focus {
+            background-color: rgba(255,255,255,0.12);
+            color: #fff !important;
+        }
+
+        .app-navbar .nav-link.active {
+            background-color: rgba(255,255,255,0.17);
+            color: #fff !important;
+        }
+
+        .app-navbar .navbar-toggler {
+            border-color: rgba(255,255,255,0.35);
+        }
+
+        .app-navbar .navbar-toggler-icon {
+            filter: brightness(0) invert(1);
+        }
+
+        /* Sayfa içeriği */
+        .app-content {
+            flex: 1;
+            padding-top: 2rem;
+            padding-bottom: 3rem;
+        }
+
+        .page-container {
+            background: #ffffff;
+            border: 1px solid #e8edf4;
+            border-radius: 14px;
+            padding: 1.75rem;
+            box-shadow: 0 5px 25px rgba(26, 44, 69, 0.04);
+            min-height: 280px;
+        }
+
+        h1, h2, h3, h4 {
+            color: #19304d;
+            font-weight: 650;
+        }
+
+        /* Tablolar */
+        .table {
+            vertical-align: middle;
+        }
+
+        .table thead th {
+            background-color: #edf3fa;
+            color: #344860;
+            font-weight: 600;
+            border-bottom: 1px solid #dbe4ef;
+        }
+
+        /* Butonlar */
+        .btn {
+            border-radius: 7px;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background-color: #2563eb;
+            border-color: #2563eb;
+        }
+
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+            border-color: #1d4ed8;
+        }
+
+        /* Formlar */
+        .form-control,
+        .form-select {
+            border-radius: 7px;
+            border-color: #d7e0eb;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #7da7ff;
+            box-shadow: 0 0 0 0.2rem rgba(59,130,246,0.13);
+        }
+
+        /* Kartlar */
+        .card {
+            border: 1px solid #e6edf5;
+            border-radius: 11px;
+        }
+
+        .card-header {
+            background: #f6f9fd;
+            border-bottom: 1px solid #e6edf5;
+            padding: 0.9rem 1.1rem;
+        }
+
+        /* Alt bilgi */
+        .app-footer {
+            background: #fff;
+            border-top: 1px solid #e3e9f1;
+            color: #718096;
+            padding: 1rem 0;
+            font-size: 0.875rem;
+        }
+
+        /* Varsayılan site.css footer konumunu geçersiz kıl */
+        .app-footer.footer {
+            position: static;
+            line-height: normal;
+            width: auto;
+        }
+
+        @@media (max-width: 767.98px) {
+            .app-content {
+                padding-top: 1rem;
+                padding-bottom: 1.5rem;
+            }
+
+            .page-container {
+                padding: 1rem;
+                border-radius: 10px;
+            }
+
+            .app-navbar .navbar-nav {
+                padding-top: 0.75rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    @{
+        bool isAuthorizedRole =
+        User.IsInRole("Admin") ||
+        User.IsInRole("Manager") ||
+        User.IsInRole("Finance");
+
+        string currentController =
+        ViewContext.RouteData.Values["controller"]?.ToString()
+        ?? "";
+
+        string homeActive =
+        currentController == "Home" ? "active" : "";
+
+        string vehiclesActive =
+        currentController == "Vehicles" ? "active" : "";
+
+        string finesActive =
+        currentController == "TrafficFines" ? "active" : "";
+
+        string adminActive =
+        currentController == "Admin" ? "active" : "";
+    }
+
+    <header>
+        <nav class="navbar navbar-expand-lg app-navbar"
+             data-bs-theme="dark">
+
+            <div class="container-fluid px-lg-4">
+
+                <!-- Marka -->
+                <a class="app-brand d-flex align-items-center"
+                   asp-area=""
+                   asp-controller="Home"
+                   asp-action="Index">
+
+                    <span class="brand-icon">🚘</span>
+
+                    <span>Trafik Ceza Yönetimi</span>
+                </a>
+
+                <!-- Mobil menü -->
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#appNavbar"
+                        aria-controls="appNavbar"
+                        aria-expanded="false"
+                        aria-label="Menüyü aç veya kapat">
+
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse"
+                     id="appNavbar">
+
+                    <!-- Sol menü -->
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+
+                        <li class="nav-item">
+                            <a class="nav-link @homeActive"
+                               asp-area=""
+                               asp-controller="Home"
+                               asp-action="Index">
+                                Ana Sayfa
+                            </a>
+                        </li>
+
+                        @if (isAuthorizedRole)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @vehiclesActive"
+                                   asp-area=""
+                                   asp-controller="Vehicles"
+                                   asp-action="Index">
+                                    Araç Yönetimi
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link @finesActive"
+                                   asp-area=""
+                                   asp-controller="TrafficFines"
+                                   asp-action="Index">
+                                    Trafik Cezaları
+                                </a>
+                            </li>
+                        }
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @adminActive"
+                                   asp-area=""
+                                   asp-controller="Admin"
+                                   asp-action="Index">
+                                    Kullanıcı Yönetimi
+                                </a>
+                            </li>
+                        }
+
+                    </ul>
+
+                    <!-- Giriş / Çıkış alanı -->
+                    <div class="d-flex align-items-lg-center">
+                        <partial name="_LoginPartial" />
+                    </div>
+
+                </div>
+            </div>
+        </nav>
+    </header>
+
+
+    <!-- Sayfa içeriği -->
+    <div class="container-fluid app-content">
+        <div class="container-xl">
+
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show"
+                     role="alert">
+                    @TempData["SuccessMessage"]
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="alert"
+                            aria-label="Kapat">
+                    </button>
+                </div>
+            }
+
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show"
+                     role="alert">
+                    @TempData["ErrorMessage"]
+
+                    <button type="button"
+                            class="btn-close"
+                            data-bs-dismiss="alert"
+                            aria-label="Kapat">
+                    </button>
+                </div>
+            }
+
+            <main role="main"
+                  class="page-container">
+                @RenderBody()
+            </main>
+
+        </div>
+    </div>
+
+
+    <!-- Footer -->
+    <footer class="app-footer footer">
+        <div class="container-xl d-flex flex-wrap
+                    justify-content-between gap-2">
+
+            <span>
+                &copy; @DateTime.Now.Year
+                Trafik Ceza Yönetim Sistemi
+            </span>
+
+            <span>
+                ASP.NET Core MVC · .NET 9
+            </span>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="~/js/site.js"
+            asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

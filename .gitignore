@@ -1,0 +1,25 @@
+# .NET / Visual Studio
+.vs/
+bin/
+obj/
+**/bin/
+**/obj/
+*.user
+*.suo
+*.rsuser
+TestResults/
+
+# Local configuration / secrets
+appsettings.Development.json
+**/secrets.json
+.env
+.env.*
+
+# Local databases
+*.mdf
+*.ldf
+*.db
+*.sqlite
+
+# Local publish artifacts
+publish/

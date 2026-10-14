@@ -1,0 +1,61 @@
+@model Traffic.Models.TrafficFine
+
+@{
+    ViewData["Title"] = "Trafik Cezasý Sil";
+}
+
+<h2 class="mb-4">Trafik Cezasý Sil</h2>
+
+<div class="alert alert-warning">
+    <strong>Dikkat!</strong>
+    Bu trafik cezasýný silmek istediðinizden
+    emin misiniz?
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+
+        <dl class="row">
+
+            <dt class="col-sm-4">Plaka</dt>
+            <dd class="col-sm-8">
+                @Model.Vehicle.Plate
+            </dd>
+
+            <dt class="col-sm-4">Ceza Tutarý</dt>
+            <dd class="col-sm-8">
+                @Model.FineAmount.ToString("N2") TL
+            </dd>
+
+            <dt class="col-sm-4">Ceza Tarihi</dt>
+            <dd class="col-sm-8">
+                @Model.FineDate.ToString("dd.MM.yyyy")
+            </dd>
+
+            <dt class="col-sm-4">Açýklama</dt>
+            <dd class="col-sm-8 text-break">
+                @Model.Description
+            </dd>
+
+        </dl>
+    </div>
+</div>
+
+<form asp-action="Delete"
+      asp-route-id="@Model.Id"
+      method="post">
+
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden"
+           name="rowVersion"
+           value="@Convert.ToBase64String(Model.RowVersion)" />
+
+    <button type="submit" class="btn btn-danger">
+        Evet, Sil
+    </button>
+
+    <a asp-action="Index" class="btn btn-secondary">
+        Vazgeç
+    </a>
+
+</form>

@@ -1,0 +1,89 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@{
+    string? roleName = null;
+
+    if (User.IsInRole("Admin"))
+    {
+        roleName = "Admin";
+    }
+    else if (User.IsInRole("Manager"))
+    {
+        roleName = "Manager";
+    }
+    else if (User.IsInRole("Finance"))
+    {
+        roleName = "Finance";
+    }
+}
+
+<ul class="navbar-nav align-items-lg-center gap-lg-2">
+
+    @if (SignInManager.IsSignedIn(User))
+    {
+
+        <!-- Kullanıcı bilgileri -->
+        <li class="nav-item">
+            <span class="nav-link d-flex align-items-center gap-2">
+
+                <span aria-hidden="true">👤</span>
+
+                <span class="text-truncate"
+                      style="max-width: 220px;">
+                    @UserManager.GetUserName(User)
+                </span>
+
+                @if (roleName != null)
+                {
+                    <span class="badge rounded-pill bg-light text-dark">
+                        @roleName
+                    </span>
+                }
+
+            </span>
+        </li>
+
+
+        <!-- Güvenli çıkış işlemi -->
+        <li class="nav-item">
+            <form asp-area="Identity"
+                  asp-page="/Account/Logout"
+                  asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })"
+                  method="post"
+                  class="m-0">
+
+                <button type="submit"
+                        class="btn btn-outline-light btn-sm px-3">
+                    Çıkış Yap
+                </button>
+
+            </form>
+        </li>
+    }
+    else
+    {
+        <!-- Giriş -->
+        <li class="nav-item">
+            <a class="nav-link"
+               asp-area="Identity"
+               asp-page="/Account/Login">
+
+                Giriş Yap
+            </a>
+        </li>
+
+        <!-- Kayıt -->
+        <li class="nav-item">
+            <a class="btn btn-light btn-sm px-3"
+               asp-area="Identity"
+               asp-page="/Account/Register">
+
+                Kayıt Ol
+            </a>
+        </li>
+    }
+
+</ul>

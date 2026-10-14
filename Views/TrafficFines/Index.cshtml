@@ -1,0 +1,104 @@
+@model IEnumerable<Traffic.Models.TrafficFine>
+@using Traffic.Models
+
+@{
+    ViewData["Title"] = "Trafik Cezalarý";
+}
+
+<h2 class="mb-4">Trafik Cezasý Yönetimi</h2>
+
+
+<p>
+
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Create"
+           class="btn btn-primary mb-3">
+            + Yeni Trafik Cezasý
+        </a>
+    }
+
+</p>
+
+<table class="table table-striped table-bordered">
+    <thead>
+        <tr>
+            <th>Plaka</th>
+            <th>Ceza Tutarý</th>
+            <th>Ceza Tarihi</th>
+            <th>Durum</th>
+            <th>Ýþlemler</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var fine in Model)
+        {
+            <tr>
+                <td>@fine.Vehicle.Plate</td>
+                <td>@fine.FineAmount.ToString("N2") TL</td>
+                <td>@fine.FineDate.ToString("dd.MM.yyyy")</td>
+                <td>
+                    @switch (fine.Status)
+                    {
+                        case FineStatus.New:
+                            <span class="badge bg-primary">Yeni</span>
+                            break;
+
+                        case FineStatus.ManagerApproval:
+                            <span class="badge bg-warning text-dark">
+                                Yönetici Onayý
+                            </span>
+                            break;
+
+                        case FineStatus.FinanceApproval:
+                            <span class="badge bg-info text-dark">
+                                Finans Onayý
+                            </span>
+                            break;
+
+                        case FineStatus.Completed:
+                            <span class="badge bg-success">
+                                Tamamlandý
+                            </span>
+                            break;
+
+                        case FineStatus.Rejected:
+                            <span class="badge bg-danger">
+                                Reddedildi
+                            </span>
+                            break;
+                    }
+                </td>
+
+
+
+                <td>
+                    <a asp-action="Details"
+                       asp-route-id="@fine.Id"
+                       class="btn btn-sm btn-info">
+                        Detay
+                    </a>
+
+                    @if (User.IsInRole("Admin") &&
+                                    fine.Status == FineStatus.New)
+                    {
+                        <a asp-action="Edit"
+                           asp-route-id="@fine.Id"
+                           class="btn btn-sm btn-warning">
+                            Düzenle
+                        </a>
+
+                        <a asp-action="Delete"
+                           asp-route-id="@fine.Id"
+                           class="btn btn-sm btn-danger">
+                            Sil
+                        </a>
+                    }
+                </td>
+
+
+            </tr>
+        }
+    </tbody>
+</table>

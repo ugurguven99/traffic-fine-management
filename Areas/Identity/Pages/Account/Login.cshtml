@@ -1,0 +1,172 @@
+@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Giriþ Yap";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-7 col-lg-5">
+
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+
+                <h2 class="text-center mb-2">
+                    Giriþ Yap
+                </h2>
+
+                <p class="text-muted text-center mb-4">
+                    Trafik Ceza Yönetim Sistemine
+                    giriþ yapýn.
+                </p>
+
+                <form id="account" method="post">
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="text-danger mb-3"
+                         role="alert">
+                    </div>
+
+                    <!-- E-posta -->
+                    <div class="mb-3">
+                        <label asp-for="Input.Email"
+                               class="form-label">
+                            E-posta Adresi
+                        </label>
+
+                        <input asp-for="Input.Email"
+                               type="email"
+                               class="form-control"
+                               autocomplete="username"
+                               placeholder="ornek@example.com"
+                               required />
+
+                        <span asp-validation-for="Input.Email"
+                              class="text-danger"></span>
+                    </div>
+
+                    
+                    <!-- Þifre -->
+                    <div class="mb-3">
+                        <label asp-for="Input.Password"
+                               class="form-label">
+                            Þifre
+                        </label>
+
+                        <div class="input-group">
+                            <input asp-for="Input.Password"
+                                   type="password"
+                                   id="loginPassword"
+                                   class="form-control"
+                                   autocomplete="current-password"
+                                   placeholder="Þifrenizi giriniz"
+                                   required />
+
+                            <button type="button"
+                                    class="btn btn-outline-secondary"
+                                    id="toggleLoginPassword"
+                                    aria-label="Þifreyi göster"
+                                    aria-pressed="false"
+                                    title="Þifreyi göster">
+
+                                <svg id="loginEyeIcon"
+                                     xmlns="http://www.w3.org/2000/svg"
+                                     width="20"
+                                     height="20"
+                                     viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="2"
+                                     stroke-linecap="round"
+                                     stroke-linejoin="round"
+                                     aria-hidden="true">
+                                    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
+                                    <circle cx="12" cy="12" r="3" />
+                                </svg>
+
+                            </button>
+                        </div>
+
+                        <span asp-validation-for="Input.Password"
+                              class="text-danger"></span>
+                    </div>
+
+
+                    <!-- Beni Hatýrla -->
+                    <div class="form-check mb-4">
+                        <input asp-for="Input.RememberMe"
+                               class="form-check-input" />
+
+                        <label asp-for="Input.RememberMe"
+                               class="form-check-label">
+                            Beni Hatýrla
+                        </label>
+                    </div>
+
+                    <!-- Giriþ Butonu -->
+                    <button id="login-submit"
+                            type="submit"
+                            class="btn btn-primary w-100 py-2">
+                        Giriþ Yap
+                    </button>
+
+                </form>
+
+                <hr class="my-4" />
+
+                <p class="text-center mb-0">
+                    Henüz hesabýnýz yok mu?
+                    <a asp-area="Identity"
+                       asp-page="/Account/Register">
+                        Kayýt Ol
+                    </a>
+                </p>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const passwordInput =
+                document.getElementById("loginPassword");
+
+            const toggleButton =
+                document.getElementById("toggleLoginPassword");
+
+            const eyeIcon =
+                document.getElementById("loginEyeIcon");
+
+            toggleButton.addEventListener("click", function () {
+                const isHidden = passwordInput.type === "password";
+
+                passwordInput.type = isHidden ? "text" : "password";
+
+
+                eyeIcon.style.opacity = isHidden ? "0.55" : "1";
+
+
+                toggleButton.setAttribute(
+                    "aria-label",
+                    isHidden ? "Þifreyi gizle" : "Þifreyi göster"
+                );
+
+                toggleButton.setAttribute(
+                    "title",
+                    isHidden ? "Þifreyi gizle" : "Þifreyi göster"
+                );
+
+                toggleButton.setAttribute(
+                    "aria-pressed",
+                    isHidden ? "true" : "false"
+                );
+            });
+        });
+    </script>
+}

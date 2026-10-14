@@ -1,0 +1,101 @@
+@model Traffic.Models.TrafficFine
+
+@{
+    ViewData["Title"] = "Trafik Cezasý Düzenle";
+}
+
+<h2 class="mb-4">Trafik Cezasý Düzenle</h2>
+
+<div class="row">
+    <div class="col-md-6">
+
+        <form asp-action="Edit"
+              asp-route-id="@Model.Id"
+              method="post">
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger mb-3"></div>
+
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="RowVersion" />
+
+            <div class="mb-3">
+                <label asp-for="VehicleId"
+                       class="form-label"></label>
+
+                <select asp-for="VehicleId"
+                        asp-items="ViewBag.VehicleId"
+                        class="form-select">
+                    <option value="0">Araç seçiniz</option>
+                </select>
+
+                <span asp-validation-for="VehicleId"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="FineAmount"
+                       class="form-label"></label>
+
+                <input asp-for="FineAmount"
+                       type="number"
+                       step="0.01"
+                       min="0.01"
+                       class="form-control" />
+
+                <span asp-validation-for="FineAmount"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="FineDate"
+                       class="form-label"></label>
+
+                <input asp-for="FineDate"
+                       type="date"
+                       class="form-control" />
+
+                <span asp-validation-for="FineDate"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Description"
+                       class="form-label"></label>
+
+                <textarea asp-for="Description"
+                          class="form-control"
+                          rows="4"
+                          maxlength="500"
+                          placeholder="Ceza açýklamasýný giriniz..."></textarea>
+
+                <div class="form-text">
+                    En fazla 500 karakter girebilirsiniz.
+                </div>
+
+                <span asp-validation-for="Description"
+                      class="text-danger"></span>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit"
+                        class="btn btn-primary">
+                    Güncelle
+                </button>
+
+                <a asp-action="Index"
+                   class="btn btn-secondary">
+                    Listeye Dön
+                </a>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync(
+            "_ValidationScriptsPartial");
+    }
+}

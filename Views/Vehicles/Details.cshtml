@@ -1,0 +1,65 @@
+@model Traffic.Models.Vehicle
+
+@{
+    ViewData["Title"] = "Araç Detayý";
+}
+
+<div class="d-flex justify-content-between
+            align-items-center mb-4">
+    <div>
+        <h2 class="mb-1">Araç Detayý</h2>
+        <p class="text-muted mb-0">
+            Araç kayýt bilgilerini görüntüleyebilirsiniz.
+        </p>
+    </div>
+
+    <span class="badge bg-primary fs-6">
+        @Model.Plate
+    </span>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-header">
+        <strong>Araç Bilgileri</strong>
+    </div>
+
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-4 mb-3">Plaka</dt>
+            <dd class="col-sm-8 mb-3">
+                @Model.Plate
+            </dd>
+
+            <dt class="col-sm-4 mb-3">Araç Tipi</dt>
+            <dd class="col-sm-8 mb-3">
+                @Html.DisplayFor(m => m.VehicleType)
+            </dd>
+
+            <dt class="col-sm-4 mb-3">Marka</dt>
+            <dd class="col-sm-8 mb-3">
+                @Model.Brand
+            </dd>
+
+            <dt class="col-sm-4">Model</dt>
+            <dd class="col-sm-8">
+                @Model.Model
+            </dd>
+        </dl>
+    </div>
+</div>
+
+<div class="d-flex flex-wrap gap-2">
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Edit"
+           asp-route-id="@Model.Id"
+           class="btn btn-warning">
+            Düzenle
+        </a>
+    }
+
+    <a asp-action="Index"
+       class="btn btn-secondary">
+        Araç Listesine Dön
+    </a>
+</div>

@@ -1,0 +1,218 @@
+@page
+@model Traffic.Areas.Identity.Pages.Account.RegisterModel
+
+@{
+    ViewData["Title"] = "Kayýt Ol";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-7 col-lg-5">
+
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+
+                <h2 class="text-center mb-2">Kayýt Ol</h2>
+
+                <p class="text-muted text-center mb-4">
+                    Trafik Ceza Yönetim Sistemi için
+                    yeni bir hesap oluþturun.
+                </p>
+
+                <form id="registerForm"
+                      method="post"
+                      asp-route-returnUrl="@Model.ReturnUrl">
+
+                    <div asp-validation-summary="ModelOnly"
+                         class="text-danger mb-3">
+                    </div>
+
+                    <!-- E-posta -->
+                    <div class="mb-3">
+                        <label asp-for="Input.Email"
+                               class="form-label">
+                            E-posta Adresi
+                        </label>
+
+                        <input asp-for="Input.Email"
+                               type="email"
+                               class="form-control"
+                               autocomplete="username"
+                               placeholder="ornek@example.com" />
+
+                        <span asp-validation-for="Input.Email"
+                              class="text-danger"></span>
+                    </div>
+
+                    <!-- Þifre -->
+                    <div class="mb-3">
+                        <label asp-for="Input.Password"
+                               class="form-label">
+                            Þifre
+                        </label>
+
+                        <div class="input-group">
+                            <input asp-for="Input.Password"
+                                   id="registerPassword"
+                                   type="password"
+                                   class="form-control"
+                                   autocomplete="new-password" />
+
+                            <button type="button"
+                                    class="btn btn-outline-secondary"
+                                    data-password-toggle="registerPassword"
+                                    aria-label="Þifreyi göster"
+                                    aria-pressed="false"
+                                    title="Þifreyi göster">
+
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     width="20"
+                                     height="20"
+                                     viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="2"
+                                     stroke-linecap="round"
+                                     stroke-linejoin="round"
+                                     aria-hidden="true">
+                                    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
+                                    <circle cx="12" cy="12" r="3" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <span asp-validation-for="Input.Password"
+                              class="text-danger"></span>
+                    </div>
+
+                    <!-- Þifre Tekrarý -->
+                    <div class="mb-3">
+                        <label asp-for="Input.ConfirmPassword"
+                               class="form-label">
+                            Þifre Tekrarý
+                        </label>
+
+                        <div class="input-group">
+                            <input asp-for="Input.ConfirmPassword"
+                                   id="registerConfirmPassword"
+                                   type="password"
+                                   class="form-control"
+                                   autocomplete="new-password" />
+
+                            <button type="button"
+                                    class="btn btn-outline-secondary"
+                                    data-password-toggle="registerConfirmPassword"
+                                    aria-label="Þifre tekrarýný göster"
+                                    aria-pressed="false"
+                                    title="Þifre tekrarýný göster">
+
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     width="20"
+                                     height="20"
+                                     viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="2"
+                                     stroke-linecap="round"
+                                     stroke-linejoin="round"
+                                     aria-hidden="true">
+                                    <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
+                                    <circle cx="12" cy="12" r="3" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <span asp-validation-for="Input.ConfirmPassword"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="alert alert-info small">
+                        Þifreniz en az 8 karakter içermeli;
+                        büyük harf, küçük harf, rakam
+                        ve özel karakter bulunmalýdýr.
+                    </div>
+
+                    <button type="submit"
+                            class="btn btn-primary w-100 py-2">
+                        Hesap Oluþtur
+                    </button>
+
+                </form>
+
+                <hr class="my-4" />
+
+                <p class="text-center mb-0">
+                    Zaten hesabýnýz var mý?
+                    <a asp-page="./Login">Giriþ Yap</a>
+                </p>
+
+            </div>
+        </div>
+
+        <p class="text-muted small text-center mt-3">
+            Hesabýnýz oluþturulduktan sonra
+            Manager veya Finance yetkiniz
+            sistem yöneticisi tarafýndan atanýr.
+        </p>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const toggleButtons =
+                document.querySelectorAll("[data-password-toggle]");
+
+            toggleButtons.forEach(function (button) {
+
+                button.addEventListener("click", function () {
+
+                    const inputId =
+                        button.getAttribute("data-password-toggle");
+
+                    const passwordInput =
+                        document.getElementById(inputId);
+
+                    if (!passwordInput) return;
+
+                    const isHidden =
+                        passwordInput.type === "password";
+
+                    passwordInput.type =
+                        isHidden ? "text" : "password";
+
+                    const isConfirm =
+                        inputId === "registerConfirmPassword";
+
+                    const label = isConfirm
+                        ? (isHidden
+                            ? "Þifre tekrarýný gizle"
+                            : "Þifre tekrarýný göster")
+                        : (isHidden
+                            ? "Þifreyi gizle"
+                            : "Þifreyi göster");
+
+                    button.setAttribute("aria-label", label);
+                    button.setAttribute("title", label);
+                    button.setAttribute(
+                        "aria-pressed",
+                        isHidden ? "true" : "false"
+                    );
+
+                    // Ýkonun görünümünü hafifçe deðiþtir.
+                    button.classList.toggle(
+                        "btn-outline-primary",
+                        isHidden
+                    );
+                    button.classList.toggle(
+                        "btn-outline-secondary",
+                        !isHidden
+                    );
+                });
+            });
+        });
+    </script>
+}
