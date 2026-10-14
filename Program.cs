@@ -38,13 +38,19 @@ builder.Services.AddScoped<ApprovalService>();
 
 var app = builder.Build();
 
-// Development ortamýnda rolleri oluþtur
+// Development ortamýnda roller ve ilk Admin atamasý
 if (app.Environment.IsDevelopment())
 {
     using var scope = app.Services.CreateScope();
 
     await IdentitySeeder.SeedRolesAsync(
         scope.ServiceProvider);
+
+    // BootstrapAdmin:Email ayarlanmýþsa mevcut kullanýcýya
+    // Admin rolü atanýr. Ayar yoksa iþlem yapýlmaz.
+    await IdentitySeeder.SeedFirstAdminAsync(
+        scope.ServiceProvider,
+        app.Configuration);
 }
 
 // Hata yönetimi
