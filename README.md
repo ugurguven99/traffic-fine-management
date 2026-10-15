@@ -180,25 +180,31 @@ Development ortamında `Admin`, `Manager` ve `Finance` rolleri `IdentitySeeder.S
 
 > Bu bölüm, `Program.cs` içindeki Development bloğunda **hem** `IdentitySeeder.SeedRolesAsync(...)` **hem de** `IdentitySeeder.SeedFirstAdminAsync(scope.ServiceProvider, app.Configuration)` çağrıları bulunduğu sürüm için geçerlidir.
 
-1. Uygulamayı başlatıp **Kayıt Ol** ekranından bir hesap oluşturun. Geçerli bir e-posta adresi ve Identity şifre kurallarını karşılayan bir parola kullanın (en az 8 karakter; büyük/küçük harf, rakam ve özel karakter).
-2. Uygulamayı durdurun.
-3. Proje kök dizininde, oluşturduğunuz hesabın e-posta adresini User Secrets'a girin:
+1. Uygulamayı başlatın ve **Kayıt Ol** ekranından yeni bir kullanıcı hesabı oluşturun. Şifre en az 8 karakter içermeli; büyük harf, küçük harf, rakam ve özel karakter bulunmalıdır.
+
+2. Yeni oluşturulan kullanıcıya henüz herhangi bir rol atanmadığından, yönetim ekranlarına erişmeye çalıştığınızda **Access Denied (Erişim Engellendi)** uyarısıyla karşılaşabilirsiniz. Bu durum normaldir. İlk Admin yetkisini tanımlamak için uygulamayı durdurun.
+
+3. Proje kök dizininde bir terminal açın ve oluşturduğunuz kullanıcının e-posta adresini User Secrets'a kaydedin:
 
    ```powershell
    dotnet user-secrets set "BootstrapAdmin:Email" "admin@example.com"
    ```
 
-   `admin@example.com` yerine **az önce kayıt olduğunuz e-posta adresini** yazın.
+   **Önemli:** `admin@example.com` yalnızca örnek bir adrestir. Bu değeri, 1. adımda kayıt olduğunuz e-posta adresiyle değiştirin.
 4. Uygulamayı tekrar **Development** ortamında başlatın. `SeedFirstAdminAsync`, veritabanında zaten bulunan ilgili kullanıcıya `Admin` rolünü atar. **Kullanıcıyı kendisi oluşturmaz.**
-5. Güvenlik için geçici ayarı kaldırın:
+5. Uygulama yeniden başladıktan sonra Admin hesabıyla giriş yapın ve **Kullanıcı Yönetimi** ekranına erişebildiğinizi doğrulayın.
+
+6. İlk Admin yetkisinin başarıyla atandığını doğruladıktan sonra geçici yapılandırmayı kaldırın:
 
    ```powershell
    dotnet user-secrets remove "BootstrapAdmin:Email"
    ```
 
-6. Admin hesabıyla oturum açın. Diğer kullanıcılar Kayıt Ol ekranından oluşturulabilir; Admin, **Kullanıcı Yönetimi** bölümünden uygun hesaplara `Manager` veya `Finance` rolünü atayabilir. Rol değişikliğinden sonra ilgili kullanıcının yeniden giriş yapması gerekebilir.
+   İsterseniz `dotnet user-secrets list` komutuyla ayarın kaldırıldığını kontrol edebilirsiniz.
 
-**Güvenlik:** `BootstrapAdmin:Email` değerini `appsettings.json` içine veya GitHub'a koymayın. Bu işlem yalnızca güvenilir **yerel Development ortamı** için tasarlanmıştır. Public Register ekranı da case testini kolaylaştırmak içindir; üretim ortamında kontrollü kullanıcı daveti/onayı ayrıca tasarlanmalıdır.
+   Bu işlem Admin hesabını veya kullanıcının rolünü silmez. Yalnızca ilk kurulum sırasında kullanılan yapılandırma ayarını kaldırır.
+
+7. Diğer kullanıcıları **Kayıt Ol** ekranından oluşturun. Admin hesabıyla **Kullanıcı Yönetimi** sayfasından `Manager` ve `Finance` rollerini atayın.
 
 ## Örnek Test Senaryosu
 
